@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Register Employee{% endblock %}
+
+{% block content %}
+<h2>Register a New Employee</h2>
+<form method="POST" action="{{ url_for('register') }}">
+  <p>
+    <label>Email:</label><br>
+    <input type="text" name="email_id" required>
+  </p>
+  <p>
+    <label>Password:</label><br>
+    <input type="password" name="password" required>
+  </p>
+  
+  <p>
+    <label>Access Level:</label><br>
+    <select name="access_level" id="access_level" onchange="adjustFields()" class="dropdown">
+      <option value="admin">admin</option>
+      <option value="department">department</option>
+      <option value="project">project</option>
+    </select>
+  </p>
+
+  <div id="departmentDiv" style="display:none;">
+    <label>Department:</label><br>
+    <select name="department_id" id="department_id" class="dropdown">
+      {% for d in departments %}
+        <option value="{{ d.id }}">{{ d.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div id="projectDiv" style="display:none;">
+    <label>Project:</label><br>
+    <select name="project_id" id="project_id" class="dropdown">
+      {% for p in projects %}
+        <option value="{{ p.id }}">{{ p.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <button type="submit" class="btn">Register</button>
+</form>
+
+<script>
+function adjustFields() {
+  let level = document.getElementById("access_level").value;
+  let deptDiv = document.getElementById("departmentDiv");
+  let projDiv = document.getElementById("projectDiv");
+
+  if (level === "admin") {
+    deptDiv.style.display = "none";
+    projDiv.style.display = "none";
+  } else if (level === "department") {
+    deptDiv.style.display = "block";
+    projDiv.style.display = "none";
+  } else if (level === "project") {
+    deptDiv.style.display = "block";
+    projDiv.style.display = "block";
+  }
+}
+// Trigger once on load
+adjustFields();
+</script>
+{% endblock content %}

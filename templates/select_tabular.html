@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Select Tabular Files{% endblock %}
+
+{% block content %}
+<h2>Select Tabular Files for Processing</h2>
+<p>Please check at least one file to process.</p>
+<form method="POST" action="{{ url_for('select_tabular') }}">
+  {% if tabular_files %}
+    {% for file in tabular_files %}
+      <div style="margin: 5px 0;">
+        <input type="checkbox" name="selected_tabular_files" value="{{ file }}" id="{{ file }}">
+        <label for="{{ file }}">{{ file }}</label>
+      </div>
+    {% endfor %}
+    <br>
+    <div style="margin-top: 10px;">
+      <label for="prompt_template"><strong>Prompt Template (optional):</strong></label><br>
+      <textarea name="prompt_template" id="prompt_template" rows="4" style="width:80%;" placeholder="Enter a brief about the datasets and common join key(s)."></textarea>
+    </div>
+    <br>
+    <button type="submit" class="btn">Process Selected</button>
+  {% else %}
+    <p>No tabular files available.</p>
+  {% endif %}
+</form>
+{% endblock content %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Home - Knowledge Management Portal{% endblock %}
+
+{% block content %}
+<h1>Knowledge Query Portal</h1>
+
+{% if session.user_id is defined %}
+  <!-- If user is logged in, show a welcome message. 
+       We'll assume you stored the user's email in session or can fetch from DB. -->
+  <p>
+    Hi 
+    <strong>
+      {% if session.email_id %}
+        {{ session.email_id }}
+      {% else %}
+        <!-- Or if not stored, you could do a DB lookup for session["user_id"] -->
+        User ID {{ session.user_id }}
+      {% endif %}
+    </strong>, 
+    Welcome to Knowledge Query Portal.
+  </p>
+{% else %}
+  <p>You are not logged in. Please <a href="{{ url_for('login') }}">Login</a>.</p>
+{% endif %}
+<p>Use the menu above to navigate.</p>
+{% endblock content %}

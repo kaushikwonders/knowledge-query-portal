@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Select Documents{% endblock %}
+
+{% block content %}
+<h2>Select PDFs to Process</h2>
+<form method="POST" action="{{ url_for('select_page') }}">
+  {% for fname in pdf_files %}
+    <div>
+      <input type="checkbox" name="selected_files" value="{{ fname }}" id="{{ fname }}">
+      <label for="{{ fname }}">{{ fname }}</label>
+    </div>
+  {% endfor %}
+  <br>
+  <button type="submit" class="btn">Process Selected</button>
+</form>
+{% endblock content %}
