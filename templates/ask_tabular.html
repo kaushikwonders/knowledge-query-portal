@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Ask Tabular Data{% endblock %}
+
+{% block content %}
+<h2>Ask a Question About Tabular Data</h2>
+{% if filename %}
+  <p>Selected files:</p>
+  <ul>
+    {% for file in filename %}
+      <li>{{ file }}</li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No tabular files selected. Please go to the upload and select tabular files page.</p>
+{% endif %}
+
+<textarea id="questionInput" rows="3" style="width:80%;" placeholder="Enter your question..."></textarea>
+<br>
+<button id="askBtn" class="btn">Ask</button>
+
+<div id="answerDiv" style="margin-top:20px;"></div>
+
+<script>
+const askBtn = document.getElementById("askBtn");
+const questionInput = document.getElementById("questionInput");
+const answerDiv = document.getElementById("answerDiv");
+
+askBtn.addEventListener("click", async () => {
+  const question = questionInput.value.trim();
+  if (!question) {
+    alert("Please enter a question!");
+    return;
+  }
+  answerDiv.innerHTML = "<em>Generating query & retrieving data...</em>";
+
+  try {
+    const res = await fetch("{{ url_for('ask_tabular_api') }}", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      answerDiv.innerHTML = "<pre>" + data.answer + "</pre>";
+    } else {
+      answerDiv.innerHTML = `<p style="color:red;"><strong>Error:</strong> ${data.error || "Unknown error"}</p>`;
+    }
+  } catch (err) {
+    answerDiv.innerHTML = `<p style="color:red;"><strong>Error:</strong> Network or server issue.</p>`;
+  }
+});
+</script>
+{% endblock content %}

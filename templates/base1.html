@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Knowledge Management Portal{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <nav class="navbar">
+    <ul class="menu">
+      <li><a href="{{ url_for('home') }}">Home</a></li>
+      {% if session.user_id is defined %}
+        <li><a href="{{ url_for('upload_page') }}">Upload Document</a></li>
+        <li><a href="{{ url_for('upload_tabular') }}">Upload Tabular Data</a></li>
+
+        <li><a href="{{ url_for('select_page') }}">Select Document</a></li>
+        <li><a href="{{ url_for('select_tabular') }}">Select Tabular Data</a></li>
+
+        <li><a href="{{ url_for('ask_page') }}">Ask (Documents)</a></li>
+        <li><a href="{{ url_for('ask_tabular') }}">Ask (Tabular Data)</a></li>
+
+        <li><a href="{{ url_for('list_files') }}">View Files</a></li>
+        {% if session.access_level == 'admin' %}
+          <li><a href="{{ url_for('register') }}">Register Employee</a></li>
+          <li><a href="{{ url_for('delete_employee') }}">Delete Employee</a></li>
+        {% endif %}
+
+        <li class="push-right"><a href="{{ url_for('logout') }}">Logout</a></li>
+      {% else %}
+        <li class="push-right"><a href="{{ url_for('login') }}">Login</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+
+  <div class="main-content">
+    {% block content %}{% endblock content %}
+  </div>
+</body>
+</html>

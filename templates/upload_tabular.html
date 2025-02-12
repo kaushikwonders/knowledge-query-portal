@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Upload Tabular Data{% endblock %}
+
+{% block content %}
+<h2>Upload CSV or XLSX</h2>
+<form method="POST" action="{{ url_for('upload_tabular') }}" enctype="multipart/form-data">
+  <label>Select CSV/XLSX:</label>
+  <input type="file" name="tabular_file" accept=".csv, .xlsx" required>
+  <button type="submit" class="btn">Upload</button>
+</form>
+{% endblock content %}

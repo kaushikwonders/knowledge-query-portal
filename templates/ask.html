@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Ask Questions{% endblock %}
+
+{% block content %}
+<h2>Ask a Question</h2>
+
+{% if selected_files %}
+<p><strong>Using these documents:</strong></p>
+<ul>
+  {% for file in selected_files %}
+  <li>{{ file }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+<textarea id="questionInput" rows="4" style="width:80%;"></textarea>
+<br>
+<button id="askBtn" class="btn">Ask</button>
+
+<div id="chatHistory" style="margin-top:20px;"></div>
+
+<script>
+const askBtn = document.getElementById("askBtn");
+const questionInput = document.getElementById("questionInput");
+const chatHistoryDiv = document.getElementById("chatHistory");
+
+async function displayChatHistory(chatHistory) {
+  // Reverse so newest is on top (optional)
+  const reversed = chatHistory.slice().reverse();
+  let html = "";
+  for (const msg of reversed) {
+    if (msg.role === "user") {
+      html += `<div style="background:#e1f7e7; margin:10px; padding:8px;">
+                 <strong>You:</strong> ${msg.content}
+               </div>`;
+    } else if (msg.role === "assistant") {
+      html += `<div style="background:#e9ecef; margin:10px; padding:8px;">
+                 <strong>Assistant:</strong> ${msg.content}
+               </div>`;
+    }
+  }
+  chatHistoryDiv.innerHTML = html;
+}
+
+askBtn.addEventListener("click", async () => {
+  const question = questionInput.value.trim();
+  if (!question) {
+    alert("Please enter a question!");
+    return;
+  }
+  questionInput.value = "";
+  chatHistoryDiv.innerHTML = "<div><em>Thinking...</em></div>" + chatHistoryDiv.innerHTML;
+
+  try {
+    const res = await fetch("{{ url_for('ask') }}", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      displayChatHistory(data.chat_history);
+    } else {
+      chatHistoryDiv.innerHTML = `<div style="color:red;"><strong>Error:</strong> ${data.error || "Unknown error"}</div>` + chatHistoryDiv.innerHTML;
+    }
+  } catch (err) {
+    chatHistoryDiv.innerHTML = `<div style="color:red;"><strong>Error:</strong> Network error</div>` + chatHistoryDiv.innerHTML;
+  }
+});
+</script>
+{% endblock content %}

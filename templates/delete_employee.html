@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Delete Employee{% endblock %}
+
+{% block content %}
+<h2>Delete an Employee</h2>
+<form method="POST" action="{{ url_for('delete_employee') }}">
+  <label>Select Employee:</label><br>
+  <select name="user_id">
+    {% for u in all_users %}
+      <option value="{{ u.id }}">{{ u.email_id }} ({{ u.access_level }})</option>
+    {% endfor %}
+  </select>
+  <br><br>
+  <button type="submit" class="btn">Delete</button>
+</form>
+{% endblock content %}
