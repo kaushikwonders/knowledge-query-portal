@@ -17,3 +17,6 @@ Below are the features of the application:
 (v) Multiple PDF documents can be selected and processed which forms base knowledge for the chatbot.
 
 (vi) Incase of Tabular data multiple excel/csv files can be selected and processed, while doing that prompt can entered to mention the common key between the files.  
+
+
+![flowchart](https://github.com/user-attachments/assets/cb204cb8-bea8-4b0c-b0b3-fcd2b6fec72f)
